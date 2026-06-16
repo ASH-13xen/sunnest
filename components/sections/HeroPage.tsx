@@ -83,7 +83,7 @@ export default function HeroPage({ section }: Props) {
       <KineticMaskHero
         mediaSrc={MEDIA_SRC}
         bgImageSrc={BG_SRC}
-        isActive={isHeroActive}
+        isActive={isHeroActive && !isOverview}
         onExpansionChange={setHeroExpanded}
         onProgressChange={handleProgressChange}
       />

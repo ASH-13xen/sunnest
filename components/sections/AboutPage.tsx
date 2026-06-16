@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { motion } from "framer-motion";
 import { 
   CheckCircle2, 
@@ -213,7 +213,7 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ position, benefit, handleMove
 
 interface Props { section: Section }
 
-export default function AboutPage({ section }: Props) {
+const AboutPage = memo(function AboutPage({ section }: Props) {
   const { highlightIndex, phase, navigate } = useNavigation();
   const isHighlighted = highlightIndex === section.index;
   const isOverview    = phase === "overview" || phase === "zooming-out" || phase === "zooming-in";
@@ -393,4 +393,6 @@ export default function AboutPage({ section }: Props) {
       </div>
     </div>
   );
-}
+});
+
+export default AboutPage;

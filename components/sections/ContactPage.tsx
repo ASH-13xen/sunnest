@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect, useCallback, memo } from "react";
 import { motion } from "framer-motion";
 import { gsap } from "gsap";
 import { Mail, Phone, MapPin, ArrowRight, Sun, Check, Calendar, MessageSquare } from "lucide-react";
@@ -26,7 +26,7 @@ const MONTH_NAMES = [
 
 interface Props { section: Section }
 
-export default function ContactPage({ section }: Props) {
+const ContactPage = memo(function ContactPage({ section }: Props) {
   const { highlightIndex, phase, navigate, activeIndex } = useNavigation();
   const isHighlighted = highlightIndex === section.index;
   const isOverview    = phase === "overview" || phase === "zooming-out" || phase === "zooming-in";
@@ -543,4 +543,6 @@ export default function ContactPage({ section }: Props) {
       </div>
     </div>
   );
-}
+});
+
+export default ContactPage;

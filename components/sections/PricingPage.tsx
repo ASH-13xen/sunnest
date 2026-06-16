@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, memo } from "react";
 import { useNavigation } from "@/context/NavigationContext";
 import { Section } from "@/constants/sections";
 import { cn } from "@/lib/utils";
@@ -77,7 +77,7 @@ interface Props {
   section: Section;
 }
 
-export default function PricingPage({ section }: Props) {
+const PricingPage = memo(function PricingPage({ section }: Props) {
   const { highlightIndex, phase, navigate } = useNavigation();
   const isHighlighted = highlightIndex === section.index;
   const isOverview = phase === "overview" || phase === "zooming-out" || phase === "zooming-in";
@@ -252,4 +252,6 @@ export default function PricingPage({ section }: Props) {
       </div>
     </div>
   );
-}
+});
+
+export default PricingPage;

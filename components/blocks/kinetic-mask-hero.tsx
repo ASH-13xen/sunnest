@@ -43,6 +43,18 @@ export default function KineticMaskHero({
   const onProgressChangeRef = useRef(onProgressChange);
   const targetProgress = useRef(0);
   const isAnimating = useRef(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (!videoRef.current) return;
+    if (isActive) {
+      videoRef.current.play().catch((err) => {
+        console.warn("Video playback was prevented:", err);
+      });
+    } else {
+      videoRef.current.pause();
+    }
+  }, [isActive]);
   const autoZoomTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -374,6 +386,7 @@ export default function KineticMaskHero({
           className="w-full h-full"
         >
           <video
+            ref={videoRef}
             src={mediaSrc}
             poster={posterSrc}
             autoPlay

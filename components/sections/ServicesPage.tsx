@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import { motion } from "framer-motion";
 import {
   ClipboardList, PencilRuler, FileText, Hammer, Activity, CheckCircle2,
@@ -85,7 +85,7 @@ const FAQ_DATA: FAQItem[] = [
 
 interface Props { section: Section }
 
-export default function ServicesPage({ section }: Props) {
+const ServicesPage = memo(function ServicesPage({ section }: Props) {
   const { highlightIndex, phase, navigate } = useNavigation();
   const isHighlighted = highlightIndex === section.index;
   const isOverview    = phase === "overview" || phase === "zooming-out" || phase === "zooming-in";
@@ -301,4 +301,6 @@ export default function ServicesPage({ section }: Props) {
       <Footer />
     </div>
   );
-}
+});
+
+export default ServicesPage;

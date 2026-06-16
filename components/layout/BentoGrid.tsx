@@ -6,13 +6,24 @@ import { NavigationProvider, useNavigation } from "@/context/NavigationContext";
 import { useTheme } from "@/context/ThemeContext";
 import { SECTIONS, COLS, ROWS, GAP, Section } from "@/constants/sections";
 import { WeaveSpinner } from "@/components/ui/WeaveSpinner";
+import dynamic from "next/dynamic";
 import Navbar        from "@/components/layout/Navbar";
 import HeroPage      from "@/components/sections/HeroPage";
-import AboutPage     from "@/components/sections/AboutPage";
-import SolutionsPage from "@/components/sections/SolutionsPage";
-import PricingPage   from "@/components/sections/PricingPage";
-import ServicesPage  from "@/components/sections/ServicesPage";
-import ContactPage   from "@/components/sections/ContactPage";
+
+const dynamicImports = {
+  about:     () => import("@/components/sections/AboutPage"),
+  solutions: () => import("@/components/sections/SolutionsPage"),
+  pricing:   () => import("@/components/sections/PricingPage"),
+  services:  () => import("@/components/sections/ServicesPage"),
+  contact:   () => import("@/components/sections/ContactPage"),
+};
+
+const AboutPage     = dynamic(dynamicImports.about,     { ssr: false, loading: () => <div className="w-full h-full flex items-center justify-center"><WeaveSpinner /></div> });
+const SolutionsPage = dynamic(dynamicImports.solutions, { ssr: false, loading: () => <div className="w-full h-full flex items-center justify-center"><WeaveSpinner /></div> });
+const PricingPage   = dynamic(dynamicImports.pricing,   { ssr: false, loading: () => <div className="w-full h-full flex items-center justify-center"><WeaveSpinner /></div> });
+const ServicesPage  = dynamic(dynamicImports.services,  { ssr: false, loading: () => <div className="w-full h-full flex items-center justify-center"><WeaveSpinner /></div> });
+const ContactPage   = dynamic(dynamicImports.contact,   { ssr: false, loading: () => <div className="w-full h-full flex items-center justify-center"><WeaveSpinner /></div> });
+
 import { cn } from "@/lib/utils";
 
 type PageComponent = React.ComponentType<{ section: Section }>;
@@ -31,11 +42,18 @@ interface BentoCellWrapperProps {
   children: React.ReactNode;
   section: Section;
   isOverview: boolean;
+  isVisible: boolean;
 }
 
-function BentoCellWrapper({ children, section, isOverview }: BentoCellWrapperProps) {
+function BentoCellWrapper({ children, section, isOverview, isVisible }: BentoCellWrapperProps) {
   return (
-    <div className="w-full h-full relative">
+    <div 
+      className="w-full h-full relative"
+      style={{
+        gridColumnStart: section.col + 1,
+        gridRowStart: section.row + 1,
+      }}
+    >
       <div
         className={cn(
           "w-full h-full rounded-2xl relative transition-shadow duration-300",
@@ -43,6 +61,7 @@ function BentoCellWrapper({ children, section, isOverview }: BentoCellWrapperPro
             ? "hover:shadow-[0_10px_30px_-10px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_10px_30px_-10px_rgba(255,255,255,0.05)]" 
             : ""
         )}
+        style={{ display: isVisible ? "block" : "none" }}
       >
         {children}
         {isOverview && (
@@ -142,6 +161,23 @@ export default function BentoGrid() {
     }
   }, []);
 
+  useEffect(() => {
+    if (loading) return;
+
+    // Sequential prefetching of non-hero pages to prime the browser cache
+    const keys = Object.keys(dynamicImports) as Array<keyof typeof dynamicImports>;
+    const delay = 800; // ms spacing between fetches
+    const timers = keys.map((key, index) => {
+      return setTimeout(() => {
+        dynamicImports[key]();
+      }, index * delay);
+    });
+
+    return () => {
+      timers.forEach(clearTimeout);
+    };
+  }, [loading]);
+
   return (
     <NavigationProvider controls={controls}>
       <AnimatePresence>
@@ -204,8 +240,9 @@ function BentoGridContent({
   controls: any; 
   theme: string;
 }) {
-  const { phase } = useNavigation();
+  const { phase, activeIndex } = useNavigation();
   const isOverviewMode = phase === "overview" || phase === "zooming-out" || phase === "zooming-in";
+  const isTransitioning = phase === "zooming-in" || phase === "zooming-out";
 
   return (
     <div className="fixed inset-0 overflow-hidden bg-bg-cream transition-colors duration-500">
@@ -243,12 +280,20 @@ function BentoGridContent({
           gridTemplateRows:    `repeat(${ROWS}, 100vh)`,
           gap: `${GAP}px`,
           zIndex: 30,
+          pointerEvents: isTransitioning ? "none" : "auto",
+          willChange: isTransitioning ? "transform" : "auto",
         }}
       >
         {SECTIONS.map((section) => {
           const Page = PAGE_MAP[section.id];
+          const isVisible = isOverviewMode || activeIndex === section.index;
           return (
-            <BentoCellWrapper key={section.id} section={section} isOverview={isOverviewMode}>
+            <BentoCellWrapper 
+              key={section.id} 
+              section={section} 
+              isOverview={isOverviewMode}
+              isVisible={isVisible}
+            >
               <Page section={section} />
             </BentoCellWrapper>
           );

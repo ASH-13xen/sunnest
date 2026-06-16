@@ -41,6 +41,9 @@ export default function RootLayout({
       lang="en"
       className={`${plusJakarta.variable} ${geistSans.variable} ${geistMono.variable} ${playfairDisplay.variable} h-full antialiased`}
     >
+      <head>
+        <link rel="preload" href="/hero-bg.mp4" as="video" type="video/mp4" />
+      </head>
       <body className="min-h-full overflow-hidden">
         <ThemeProvider>{children}</ThemeProvider>
       </body>

@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import { motion } from "framer-motion";
 import { Home, Building2, Landmark, CheckCircle2 } from "lucide-react";
 import { useNavigation } from "@/context/NavigationContext";
@@ -46,7 +47,7 @@ const SOLUTIONS = [
 
 interface Props { section: Section }
 
-export default function SolutionsPage({ section }: Props) {
+const SolutionsPage = memo(function SolutionsPage({ section }: Props) {
   const { highlightIndex, phase, navigate } = useNavigation();
   const isHighlighted = highlightIndex === section.index;
   const isOverview    = phase === "overview" || phase === "zooming-out" || phase === "zooming-in";
@@ -165,4 +166,6 @@ export default function SolutionsPage({ section }: Props) {
       </div>
     </div>
   );
-}
+});
+
+export default SolutionsPage;
