@@ -150,11 +150,11 @@ export default function BentoGrid() {
 
   useEffect(() => {
     if (document.readyState === "complete") {
-      const timer = setTimeout(() => setLoading(false), 1400);
+      const timer = setTimeout(() => setLoading(false), 2200);
       return () => clearTimeout(timer);
     } else {
       const handleLoad = () => {
-        setTimeout(() => setLoading(false), 800);
+        setTimeout(() => setLoading(false), 1800);
       };
       window.addEventListener("load", handleLoad);
       return () => window.removeEventListener("load", handleLoad);
@@ -162,11 +162,10 @@ export default function BentoGrid() {
   }, []);
 
   useEffect(() => {
-    if (loading) return;
-
-    // Sequential prefetching of non-hero pages to prime the browser cache
+    // Start prefetching pages immediately on mount so they download in parallel
+    // with the loading screen, rather than waiting for the loading screen to finish.
     const keys = Object.keys(dynamicImports) as Array<keyof typeof dynamicImports>;
-    const delay = 800; // ms spacing between fetches
+    const delay = 250; // Spaced out so they start in quick succession
     const timers = keys.map((key, index) => {
       return setTimeout(() => {
         dynamicImports[key]();
@@ -176,7 +175,7 @@ export default function BentoGrid() {
     return () => {
       timers.forEach(clearTimeout);
     };
-  }, [loading]);
+  }, []);
 
   return (
     <NavigationProvider controls={controls}>
