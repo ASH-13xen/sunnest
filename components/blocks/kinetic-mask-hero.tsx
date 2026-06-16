@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 // ─── Kinetic Mask Config Variables ──────────────────────────────────────────
 // You can adjust these variables directly to fine-tune the zoom animation:
 const MAX_ZOOM_SCALE       = 100;           // Max zoom size for letters (e.g. 85, 550, 1500)
-const SCROLL_SENSITIVITY   = 0.009;        // Sensitivity of manual scroll (e.g. 0.0006, 0.0012)
+const SCROLL_SENSITIVITY   = 0.004;        // Sensitivity of manual scroll (e.g. 0.0006, 0.0012)
 const ZOOM_EASING_POWER    = 4;             // Easing power curve (higher = starts slower, speeds up at the end)
 const AUTO_ZOOM_TRIGGER    = false;         // TRUE = zoom completely on a single scroll flick; FALSE = zoom links directly to wheel scroll ticks
 const AUTO_ZOOM_DURATION   = 0.95;          // Animation duration in seconds when in single-scroll trigger mode (AUTO_ZOOM_TRIGGER = true)
