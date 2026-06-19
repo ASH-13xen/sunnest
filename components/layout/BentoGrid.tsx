@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { motion, useAnimation, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { NavigationProvider, useNavigation } from "@/context/NavigationContext";
 import { useTheme } from "@/context/ThemeContext";
@@ -26,7 +26,7 @@ const ContactPage   = dynamic(dynamicImports.contact,   { ssr: false, loading: (
 
 import { cn } from "@/lib/utils";
 
-type PageComponent = React.ComponentType<{ section: Section }>;
+type PageComponent = React.ComponentType<{ section: Section; skipEntranceAnim?: boolean }>;
 
 const PAGE_MAP: Record<string, PageComponent> = {
   hero:      HeroPage,
@@ -81,6 +81,7 @@ function ScrollHandler() {
   const phaseRef     = useRef(phase);
   const indexRef     = useRef(activeIndex);
   const scrollFnRef  = useRef(scrollTo);
+  const touchStart   = useRef({ x: 0, y: 0, time: 0 });
 
   useEffect(() => { phaseRef.current    = phase;       }, [phase]);
   useEffect(() => { indexRef.current    = activeIndex; }, [activeIndex]);
@@ -88,6 +89,8 @@ function ScrollHandler() {
 
   useEffect(() => {
     const onWheel = (e: WheelEvent) => {
+      if (window.innerWidth < 1024) return;
+
       // If a section owns its scroll (e.g. hero during expansion), stay out.
       // Sections set data-scroll-locked="true" on their root div to signal this.
       let lockEl = e.target as HTMLElement | null;
@@ -120,6 +123,7 @@ function ScrollHandler() {
     };
 
     const onKey = (e: KeyboardEvent) => {
+      if (window.innerWidth < 1024) return;
       if (phaseRef.current !== "idle") return;
       const dir =
         e.key === "ArrowDown" || e.key === "ArrowRight" ?  1 :
@@ -127,13 +131,66 @@ function ScrollHandler() {
       if (dir) scrollFnRef.current(indexRef.current + dir);
     };
 
+    const onTouchStart = (e: TouchEvent) => {
+      if (window.innerWidth < 1024) return;
+      if (e.touches.length !== 1) return;
+      touchStart.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+        time: Date.now(),
+      };
+    };
+
+    const onTouchEnd = (e: TouchEvent) => {
+      if (window.innerWidth < 1024) return;
+      if (phaseRef.current !== "idle") return;
+      if (e.changedTouches.length !== 1) return;
+
+      const deltaX = e.changedTouches[0].clientX - touchStart.current.x;
+      const deltaY = e.changedTouches[0].clientY - touchStart.current.y;
+      const deltaTime = Date.now() - touchStart.current.time;
+
+      // Swipe threshold: 50px delta, duration under 500ms
+      if (Math.abs(deltaY) < 50 || deltaTime > 500) return;
+
+      let lockEl = e.target as HTMLElement | null;
+      while (lockEl && lockEl.tagName !== "BODY") {
+        if (lockEl.dataset.scrollLocked === "true") return;
+        lockEl = lockEl.parentElement;
+      }
+
+      let el = e.target as HTMLElement | null;
+      while (el && el.tagName !== "BODY") {
+        const s = window.getComputedStyle(el);
+        if ((s.overflowY === "auto" || s.overflowY === "scroll") && el.scrollHeight > el.clientHeight) {
+          const atTop    = deltaY > 0 && el.scrollTop <= 0;
+          const atBottom = deltaY < 0 && el.scrollTop + el.clientHeight >= el.scrollHeight - 1;
+          if (!atTop && !atBottom) return; // mid-scroll inside child — let native win
+          break;
+        }
+        el = el.parentElement;
+      }
+
+      const now = Date.now();
+      if (now - lastWheelRef.current < 900) return;
+      lastWheelRef.current = now;
+
+      // deltaY < 0 means swiped UP (finger moves up to scroll down)
+      const dir = deltaY < 0 ? 1 : -1;
+      scrollFnRef.current(indexRef.current + dir);
+    };
+
     window.addEventListener("wheel", onWheel, { passive: true });
     window.addEventListener("keydown", onKey);
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchend", onTouchEnd, { passive: true });
     return () => {
       window.removeEventListener("wheel", onWheel);
       window.removeEventListener("keydown", onKey);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchend", onTouchEnd);
     };
-  }, []); // stable refs — no need to re-register on each render
+  }, []);
 
   return null;
 }
@@ -231,6 +288,8 @@ export default function BentoGrid() {
   );
 }
 
+
+
 // Inner content to resolve useNavigation context requirements
 function BentoGridContent({ 
   controls, 
@@ -239,9 +298,133 @@ function BentoGridContent({
   controls: any; 
   theme: string;
 }) {
-  const { phase, activeIndex } = useNavigation();
+  const { phase, activeIndex, setActiveIndex } = useNavigation();
   const isOverviewMode = phase === "overview" || phase === "zooming-out" || phase === "zooming-in";
   const isTransitioning = phase === "zooming-in" || phase === "zooming-out";
+
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 1024);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  // Latest activeIndex without re-running the scroll-snap effect below on every
+  // IntersectionObserver-driven update (that would fight the user's own scrolling).
+  const activeIndexRef = useRef(activeIndex);
+  useEffect(() => {
+    activeIndexRef.current = activeIndex;
+  }, [activeIndex]);
+
+  // Sections whose entrance animation has already played once — either via natural
+  // scroll or by being the target of a hamburger-menu zoom — so it doesn't replay
+  // when the mobile stack remounts after a zoom-triggered navigation settles to
+  // "idle". Marked synchronously in the render body (not an effect) so the very
+  // same render that builds the mobile stack already sees the just-arrived-at
+  // section as revealed.
+  const revealedRef = useRef<Set<string>>(new Set());
+  if (isMobile && phase === "idle") {
+    revealedRef.current.add(SECTIONS[activeIndex].id);
+  }
+
+  // The mobile view swaps between this stacked list and the animated grid markup
+  // below. Re-mounting the list always starts at scrollTop 0, so when a
+  // zoom-triggered navigation (e.g. the hamburger menu) settles back to "idle",
+  // jump the freshly-mounted list straight to the active section instead of
+  // leaving it stranded at the top.
+  useLayoutEffect(() => {
+    if (!isMobile || phase !== "idle") return;
+    const containerEl = document.getElementById("mobile-scroll-container");
+    const targetSection = SECTIONS[activeIndexRef.current];
+    const targetEl = targetSection && document.getElementById(`section-${targetSection.id}`);
+    if (containerEl && targetEl) {
+      containerEl.scrollTop = targetEl.offsetTop;
+    }
+  }, [isMobile, phase]);
+
+  // Highlight navbar section links as user scrolls stacked list on mobile
+  useEffect(() => {
+    if (!isMobile || phase !== "idle") return;
+
+    const containerEl = document.getElementById("mobile-scroll-container");
+    if (!containerEl) return;
+
+    const observers = SECTIONS.map((section) => {
+      const el = document.getElementById(`section-${section.id}`);
+      if (!el) return null;
+
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setActiveIndex(section.index);
+          }
+        },
+        {
+          root: containerEl,
+          rootMargin: "-40% 0px -40% 0px", // triggers when section is centered
+        }
+      );
+      observer.observe(el);
+      return { observer, el };
+    });
+
+    return () => {
+      observers.forEach((obs) => {
+        if (obs) obs.observer.unobserve(obs.el);
+      });
+    };
+  }, [isMobile, phase, setActiveIndex]);
+
+  // Native vertical scroll stacked layout for mobile scrolling
+  if (isMobile && phase === "idle") {
+    return (
+      <div 
+        id="mobile-scroll-container" 
+        className="fixed inset-0 w-full h-full bg-bg-cream transition-colors duration-500 overflow-y-auto overflow-x-hidden z-30 no-scrollbar scroll-smooth"
+      >
+        {/* Background Solar Farm Image */}
+        <div 
+          className="absolute inset-0 z-0 pointer-events-none transition-[background-image] duration-1000"
+          style={{
+            backgroundImage: `url(${
+              theme === "day"
+                ? "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=1920&auto=format&fit=crop&q=80"
+                : "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?w=1920&auto=format&fit=crop&q=80"
+            })`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+
+        {/* Adaptive overlay — grid lines + wash */}
+        <div className="absolute inset-0 z-20 pointer-events-none bento-overlay" />
+
+        <Navbar />
+
+        {/* Stack of fullscreen sections */}
+        <div className="relative z-30 flex flex-col gap-0 w-full pt-0">
+          {SECTIONS.map((section) => {
+            const Page = PAGE_MAP[section.id];
+            return (
+              <motion.div
+                key={section.id}
+                id={`section-${section.id}`}
+                className="w-screen min-h-screen lg:h-screen relative shrink-0"
+                initial={revealedRef.current.has(section.id) ? false : { opacity: 0, scale: 1.08 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true, amount: 0.2 }}
+                onViewportEnter={() => revealedRef.current.add(section.id)}
+                transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <Page section={section} skipEntranceAnim={revealedRef.current.has(section.id)} />
+              </motion.div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 overflow-hidden bg-bg-cream transition-colors duration-500">
@@ -293,7 +476,7 @@ function BentoGridContent({
               isOverview={isOverviewMode}
               isVisible={isVisible}
             >
-              <Page section={section} />
+              <Page section={section} skipEntranceAnim={revealedRef.current.has(section.id)} />
             </BentoCellWrapper>
           );
         })}

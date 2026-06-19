@@ -108,7 +108,7 @@ export function NavigationProvider({
   );
 
   return (
-    <NavigationContext.Provider value={{ activeIndex, phase, highlightIndex, navigate, scrollTo }}>
+    <NavigationContext.Provider value={{ activeIndex, phase, highlightIndex, navigate, scrollTo, setActiveIndex }}>
       {children}
     </NavigationContext.Provider>
   );

@@ -6,4 +6,6 @@ export interface NavigationContextValue {
   highlightIndex: number | null;
   navigate: (index: number) => void;
   scrollTo: (index: number) => void;
+  setActiveIndex: (index: number) => void;
 }
+

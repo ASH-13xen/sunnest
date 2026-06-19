@@ -62,7 +62,7 @@ export function FaqAccordion({
               <Accordion.Trigger className="flex w-full items-center justify-between py-1 px-1 text-left cursor-pointer group">
                 <div
                   className={cn(
-                    "rounded-2xl px-4 py-2.5 transition-all duration-200 font-bold text-sm tracking-tight shadow-xs border",
+                    "rounded-2xl px-4 py-2.5 transition-all duration-200 font-bold text-sm lg:text-base tracking-tight shadow-xs border",
                     openItem === item.id.toString()
                       ? "bg-[#0f2744] text-[#FFD700] border-transparent shadow-md shadow-[#0f2744]/15"
                       : "bg-[rgba(255,255,255,0.9)] text-slate-800 border-[rgba(212,160,23,0.2)] hover:bg-amber-50 hover:text-[#0f2744]",
@@ -104,7 +104,7 @@ export function FaqAccordion({
                 <div className="ml-4 mt-2 md:ml-8 pb-3">
                   <div
                     className={cn(
-                      "relative max-w-lg rounded-2xl bg-gradient-to-br from-[#D4A017] to-[#B38600] px-4.5 py-3 text-white text-xs font-semibold shadow-md shadow-[#D4A017]/10 leading-relaxed",
+                      "relative max-w-lg rounded-2xl bg-gradient-to-br from-[#D4A017] to-[#B38600] px-4.5 py-3 text-white text-xs lg:text-sm font-semibold shadow-md shadow-[#D4A017]/10 leading-relaxed",
                       answerClassName
                     )}
                   >

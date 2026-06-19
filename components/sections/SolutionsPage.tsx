@@ -1,6 +1,6 @@
 "use client";
 
-import { memo } from "react";
+import { memo, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Home, Building2, Landmark, CheckCircle2 } from "lucide-react";
 import { useNavigation } from "@/context/NavigationContext";
@@ -45,18 +45,26 @@ const SOLUTIONS = [
 ];
 
 
-interface Props { section: Section }
+interface Props { section: Section; skipEntranceAnim?: boolean }
 
-const SolutionsPage = memo(function SolutionsPage({ section }: Props) {
+const SolutionsPage = memo(function SolutionsPage({ section, skipEntranceAnim }: Props) {
   const { highlightIndex, phase, navigate } = useNavigation();
   const isHighlighted = highlightIndex === section.index;
   const isOverview    = phase === "overview" || phase === "zooming-out" || phase === "zooming-in";
+
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 1024);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   return (
     <div
       onClick={() => { if (phase === "overview") navigate(section.index); }}
       className={cn(
-        "w-screen h-screen relative overflow-hidden rounded-2xl flex justify-center items-center px-4 md:px-8 py-16 transition-colors duration-500 bg-bg-cream",
+        "w-screen min-h-screen lg:h-screen relative overflow-hidden rounded-2xl flex flex-col lg:justify-center lg:items-center pt-20 pb-4 px-4 lg:px-8 lg:py-16 transition-colors duration-500 bg-bg-cream",
         isHighlighted ? "ring-4 ring-gold-400 shadow-2xl shadow-gold-500/20" : "ring-1 ring-gold-500/10",
         isOverview && phase === "overview" ? "cursor-pointer" : ""
       )}
@@ -67,7 +75,11 @@ const SolutionsPage = memo(function SolutionsPage({ section }: Props) {
       {/* Static split background — no blur filter for performance */}
       <div
         className="absolute inset-0 z-0 pointer-events-none"
-        style={{ background: "linear-gradient(to bottom, var(--navy-900) 32%, var(--bg-cream) 32%)" }}
+        style={{
+          background: isMobile
+            ? "var(--bg-cream)"
+            : "linear-gradient(to bottom, var(--navy-900) 32%, var(--bg-cream) 32%)"
+        }}
       />
 
       {isHighlighted && (
@@ -75,32 +87,32 @@ const SolutionsPage = memo(function SolutionsPage({ section }: Props) {
       )}
 
       {/* Centered Large Card */}
-      <div className="w-full max-w-5xl h-full max-h-[80vh] min-h-[500px] glass-outer backdrop-blur-sm border border-gold-500/25 rounded-[2.5rem] shadow-2xl shadow-navy-900/15 overflow-hidden relative z-10 flex flex-col">
+      <div className="w-full flex flex-col lg:h-full lg:max-w-5xl lg:max-h-[80vh] lg:min-h-[500px] lg:glass-outer lg:backdrop-blur-sm lg:border lg:border-gold-500/25 lg:rounded-[2.5rem] lg:shadow-2xl lg:shadow-navy-900/15 lg:overflow-hidden relative z-10">
         
         {/* Top header row inside the card: Dark Navy */}
-        <div className="h-[32%] min-h-[160px] bg-gradient-to-r from-navy-900 to-navy-800 px-8 py-6 relative overflow-hidden shrink-0 border-b border-[#d4a017]/10 flex flex-col md:flex-row justify-between items-center z-10">
+        <div className="h-auto lg:h-[32%] lg:min-h-[160px] bg-gradient-to-r from-navy-900 to-navy-800 px-5 py-4 md:px-8 relative overflow-hidden shrink-0 border-b lg:border-b-0 lg:border-r border-[#d4a017]/10 flex flex-col md:flex-row justify-between items-center z-10 gap-3 rounded-2xl lg:rounded-none">
           {/* Subtle radial gold overlay */}
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,160,23,0.18)_0%,transparent_100%)] pointer-events-none z-0" />
 
           <motion.div
-            initial={{ opacity: 0, y: -16 }}
+            initial={skipEntranceAnim ? false : { opacity: 0, y: -16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
-            className="relative z-10 flex flex-col md:flex-row justify-between items-center w-full gap-4"
+            className="relative z-10 flex flex-col md:flex-row justify-between items-center w-full gap-3"
           >
             <div className="text-center md:text-left">
-              <span className="font-serif italic font-normal text-amber-400 capitalize normal-case text-[14px] md:text-[15px] mb-1.5 block tracking-wide">
+              <span className="font-serif italic font-normal text-amber-400 capitalize normal-case text-[13px] md:text-[15px] mb-1 block tracking-wide">
                 What We Offer
               </span>
-              <h1 className="text-2xl md:text-3xl font-black text-white leading-tight mb-2">
+              <h1 className="text-xl md:text-3xl font-black text-white leading-tight mb-1">
                 Our <span className="bg-linear-to-r from-gold-500 via-gold-400 to-gold-600 bg-clip-text text-transparent">Solutions</span>
               </h1>
-              <p className="text-[11px] text-white/70 max-w-xl leading-relaxed">
+              <p className="text-[10px] md:text-[11px] text-white/70 max-w-xl leading-relaxed">
                 We design and deliver customized solar installations engineered to maximize yield, lower operational costs, and secure long-term energy independence.
               </p>
             </div>
 
-            <div className="flex items-center gap-6 shrink-0">
+            <div className="flex items-center gap-4 shrink-0">
               {/* Alert Box */}
               <div className="hidden lg:block p-3.5 bg-gold-500/12 border border-gold-500/20 rounded-xl max-w-[240px] text-left">
                 <div className="text-[10px] font-black text-gold-400 mb-0.5 flex items-center gap-1.5">
@@ -114,7 +126,7 @@ const SolutionsPage = memo(function SolutionsPage({ section }: Props) {
 
               <GlowButton
                 onClick={(e) => { e.stopPropagation(); navigate(2); }} // Go to Pricing
-                className="px-4 py-2.5 bg-gradient-to-r from-gold-500 to-gold-400 text-navy-900 rounded-xl text-[11px] font-black hover:from-gold-600 hover:to-gold-500 transition-all border-none whitespace-nowrap"
+                className="px-3 py-2 bg-gradient-to-r from-gold-500 to-gold-400 text-navy-900 rounded-xl text-[10px] md:text-[11px] font-black hover:from-gold-600 hover:to-gold-500 transition-all border-none whitespace-nowrap"
               >
                 Explore Pricing Plans →
               </GlowButton>
@@ -123,36 +135,36 @@ const SolutionsPage = memo(function SolutionsPage({ section }: Props) {
         </div>
 
         {/* Bottom content row inside the card: Cream/white solutions grid */}
-        <div className="flex-1 glass-inner backdrop-blur-md relative flex flex-col justify-center p-6 md:p-8 z-0">
+        <div className="flex-1 glass-inner backdrop-blur-md relative flex flex-col justify-center p-5 md:p-8 z-0 rounded-2xl lg:rounded-none mt-4 lg:mt-0">
           <div className="absolute -bottom-36 -right-36 w-80 h-80 rounded-full bg-[radial-gradient(circle,rgba(212,160,23,0.04)_0%,transparent_75%)] pointer-events-none z-0" />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 w-full relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 w-full relative z-10">
             {SOLUTIONS.map((sol) => {
               const Icon = sol.icon;
               return (
                 <div
                   key={sol.title}
-                  className="glass-card-sm border border-gold-500/20 rounded-2xl p-5 flex flex-col shadow-lg shadow-navy-900/2 min-h-0 justify-between"
+                  className="glass-card-sm border border-gold-500/20 rounded-2xl p-4 md:p-5 flex flex-col shadow-lg shadow-navy-900/2 min-h-0 justify-between"
                 >
                   <div>
                     {/* Icon + badge */}
-                    <div className="flex items-start justify-between mb-3.5">
-                      <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center bg-linear-to-br text-white shadow-md shadow-gold-500/10 shrink-0", sol.gradient)}>
-                        <Icon className="w-4.5 h-4.5 text-white" />
+                    <div className="flex items-start justify-between mb-2 md:mb-3.5">
+                      <div className={cn("w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl flex items-center justify-center bg-linear-to-br text-white shadow-md shadow-gold-500/10 shrink-0", sol.gradient)}>
+                        <Icon className="w-3.5 h-3.5 md:w-4.5 md:h-4.5 text-white" />
                       </div>
-                      <span className="font-serif italic text-[11px] capitalize tracking-wide px-2.5 py-0.5 bg-amber-100/60 text-gold-500 rounded-full shrink-0">
+                      <span className="font-serif italic text-[9px] md:text-[11px] lg:text-[12px] capitalize tracking-wide px-2 py-0.5 md:px-2.5 bg-amber-100/60 text-gold-500 rounded-full shrink-0">
                         {sol.tagline}
                       </span>
                     </div>
 
-                    <h2 className="text-sm font-black text-text-dark mb-1.5">{sol.title}</h2>
-                    <p className="text-[10px] text-text-mid leading-relaxed mb-4">{sol.desc}</p>
+                    <h2 className="text-xs md:text-sm lg:text-[15px] font-black text-text-dark mb-1 md:mb-1.5">{sol.title}</h2>
+                    <p className="text-[9px] md:text-[10px] lg:text-[11px] text-text-mid leading-relaxed mb-2 md:mb-4">{sol.desc}</p>
                   </div>
 
-                  <ul className="space-y-1 pt-3 border-t border-slate-100 mt-auto">
+                  <ul className="space-y-0.5 md:space-y-1 pt-2 md:pt-3 border-t border-slate-100 mt-auto">
                     {sol.points.map((pt) => (
-                      <li key={pt} className="flex items-center gap-2 text-[9.5px] text-text-mid font-medium">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-green-500 shrink-0" />
+                      <li key={pt} className="flex items-center gap-1.5 text-[8.5px] md:text-[9.5px] text-text-mid font-medium">
+                        <CheckCircle2 className="w-3 h-3 md:w-3.5 md:h-3.5 text-green-500 shrink-0" />
                         {pt}
                       </li>
                     ))}

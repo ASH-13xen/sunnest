@@ -38,6 +38,14 @@ export default function KineticMaskHero({
   const progressVal = useMotionValue(0);
   const [mediaFullyExpanded, setMediaFullyExpanded] = useState(false);
   const [touchStartY, setTouchStartY] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   const onExpansionChangeRef = useRef(onExpansionChange);
   const onProgressChangeRef = useRef(onProgressChange);
@@ -304,7 +312,7 @@ export default function KineticMaskHero({
             {/* White text reveals the video inside it */}
             <motion.g
               style={{
-                transformOrigin: "430px 470px", // Zooms directly into the stroke of the first 'N' of SUNNEST
+                transformOrigin: isMobile ? "450px 470px" : "430px 470px", // Zooms directly into the stroke of the first 'N' of SUNNEST
                 scale: scale,
               }}
             >
@@ -317,8 +325,8 @@ export default function KineticMaskHero({
                 fill="white"
                 className="font-sans font-black tracking-tighter"
                 style={{
-                  fontSize: "125px",
-                  letterSpacing: "-2px",
+                  fontSize: isMobile ? "90px" : "125px",
+                  letterSpacing: isMobile ? "-1px" : "-2px",
                 }}
               >
                 SUNNEST
@@ -332,7 +340,7 @@ export default function KineticMaskHero({
                 fill="white"
                 className="font-sans font-bold tracking-[0.35em]"
                 style={{
-                  fontSize: "65px",
+                  fontSize: isMobile ? "45px" : "65px",
                 }}
               >
                 POWER
@@ -344,7 +352,7 @@ export default function KineticMaskHero({
         {/* ──────── IDEA 2: 3D Architectural Shadow (Behind video) ──────── */}
         <motion.g
           style={{
-            transformOrigin: "430px 470px",
+            transformOrigin: isMobile ? "450px 470px" : "430px 470px",
             scale: scale,
             opacity: bgOpacity,
           }}
@@ -357,8 +365,8 @@ export default function KineticMaskHero({
             fill="#050C16"
             className="font-sans font-black tracking-tighter opacity-80"
             style={{
-              fontSize: "125px",
-              letterSpacing: "-2px",
+              fontSize: isMobile ? "90px" : "125px",
+              letterSpacing: isMobile ? "-1px" : "-2px",
             }}
           >
             SUNNEST
@@ -371,7 +379,7 @@ export default function KineticMaskHero({
             fill="#050C16"
             className="font-sans font-bold tracking-[0.35em] opacity-80"
             style={{
-              fontSize: "65px",
+              fontSize: isMobile ? "45px" : "65px",
             }}
           >
             POWER
@@ -406,7 +414,7 @@ export default function KineticMaskHero({
         {/* ──────── IDEA 1: Liquid Gold Outline (On top of video) ──────── */}
         <motion.g
           style={{
-            transformOrigin: "430px 470px",
+            transformOrigin: isMobile ? "450px 470px" : "430px 470px",
             scale: scale,
             opacity: bgOpacity,
           }}
@@ -421,8 +429,8 @@ export default function KineticMaskHero({
             strokeWidth="2"
             className="font-sans font-black tracking-tighter"
             style={{
-              fontSize: "125px",
-              letterSpacing: "-2px",
+              fontSize: isMobile ? "90px" : "125px",
+              letterSpacing: isMobile ? "-1px" : "-2px",
             }}
           >
             SUNNEST
@@ -437,7 +445,7 @@ export default function KineticMaskHero({
             strokeWidth="1.5"
             className="font-sans font-bold tracking-[0.35em]"
             style={{
-              fontSize: "65px",
+              fontSize: isMobile ? "45px" : "65px",
             }}
           >
             POWER
@@ -447,13 +455,18 @@ export default function KineticMaskHero({
 
       {/* Elegant Technical Spec Overlays (fades out as we zoom) */}
       <motion.div
-        className="absolute inset-x-0 bottom-12 z-40 flex flex-col items-center justify-center pointer-events-none text-center"
+        className="absolute inset-x-0 bottom-12 z-40 flex flex-col items-center justify-center gap-3 pointer-events-none text-center px-6"
         style={{ opacity: contentOpacity }}
       >
+        <p className="max-w-md text-xs md:text-sm font-medium text-white/65 leading-relaxed">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Placeholder
+          copy for the hero subheading — swap this out for the final SunNest
+          Power messaging whenever it&apos;s ready.
+        </p>
         <span className="text-[10px] font-mono tracking-[0.3em] text-white/40 uppercase">
           01 // ARCHITECTURAL ENERGY
         </span>
-        <span className="text-xs font-serif italic text-amber-300 mt-2 tracking-widest opacity-80">
+        <span className="text-xs font-serif italic text-amber-300 tracking-widest opacity-80">
           Scroll to enter the grid
         </span>
       </motion.div>

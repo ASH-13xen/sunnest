@@ -50,7 +50,7 @@ export default function HeroPage({ section }: Props) {
       onClick={() => { if (phase === "overview") navigate(section.index); }}
       data-scroll-locked={(isHeroActive && !heroExpanded) ? "true" : "false"}
       className={cn(
-        "w-screen h-screen relative overflow-hidden rounded-2xl",
+        "w-full h-screen lg:w-screen lg:h-screen relative overflow-hidden",
         isHighlighted
           ? "ring-4 ring-amber-400 shadow-2xl shadow-amber-400/30"
           : "ring-1 ring-white/10",
@@ -58,13 +58,13 @@ export default function HeroPage({ section }: Props) {
       )}
     >
       {isHighlighted && (
-        <div className="absolute inset-0 bg-amber-300/10 pointer-events-none z-10 rounded-2xl" />
+        <div className="absolute inset-0 bg-amber-300/10 pointer-events-none z-10" />
       )}
 
       {/* Premium Half-White Design Rectangle — fades out as card expands */}
       <div
         ref={rectRef}
-        className="absolute pointer-events-none"
+        className="absolute pointer-events-none hidden lg:block"
         style={{
           top: RECT_TOP,
           left: RECT_SIDE_MARGIN,
