@@ -468,7 +468,7 @@ export default function KineticMaskHero({
         <span className="text-[10px] font-mono tracking-[0.3em] text-white/40 uppercase">
           01 // ARCHITECTURAL ENERGY
         </span>
-        <span className="text-xs font-serif italic text-amber-300 tracking-widest opacity-80">
+        <span className="text-xs font-serif italic text-gold-400 tracking-widest opacity-80">
           Scroll to enter the grid
         </span>
       </motion.div>

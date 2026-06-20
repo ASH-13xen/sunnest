@@ -251,7 +251,7 @@ export default function BentoGrid() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 0.7, y: 0 }}
               transition={{ delay: 0.35, duration: 0.45 }}
-              className="text-[9px] uppercase font-black tracking-widest text-[#FFD700] mt-6 font-mono"
+              className="text-[9px] uppercase font-black tracking-widest text-gold-400 mt-6 font-mono"
             >
               Powering Clean Energy...
             </motion.p>

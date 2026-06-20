@@ -111,12 +111,12 @@ const ContactPage = memo(function ContactPage({ section }: Props) {
       onClick={() => { if (phase === "overview") navigate(section.index); }}
       className={cn(
         "w-screen min-h-screen lg:h-screen relative overflow-hidden flex flex-col lg:justify-center lg:items-center pt-20 pb-4 px-4 lg:px-8 lg:py-16 bg-bg-cream",
-        isHighlighted ? "ring-4 ring-amber-400 shadow-2xl shadow-amber-200" : "ring-1 ring-amber-100/50",
+        isHighlighted ? "ring-4 ring-gold-400 shadow-2xl shadow-gold-400/30" : "ring-1 ring-gold-500/10",
         isOverview && phase === "overview" ? "cursor-pointer" : ""
       )}
     >
       {/* Top Border Accent Line */}
-      <div className="absolute top-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-transparent via-[#FFCA28] to-transparent z-30" />
+      <div className="absolute top-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-transparent via-gold-400 to-transparent z-30" />
 
       {/* Static split background — no blur filter for performance */}
       <div
@@ -124,35 +124,35 @@ const ContactPage = memo(function ContactPage({ section }: Props) {
         style={{
           background: isMobile
             ? "var(--bg-cream)"
-            : "linear-gradient(90deg, #0A1628 38%, var(--bg-cream) 38%)"
+            : "linear-gradient(90deg, var(--navy-900) 38%, var(--bg-cream) 38%)"
         }}
       />
 
       {isHighlighted && (
-        <div className="absolute inset-0 bg-amber-300/5 pointer-events-none z-20 rounded-2xl" />
+        <div className="absolute inset-0 bg-gold-400/5 pointer-events-none z-20 rounded-2xl" />
       )}
 
       {/* Centered Large Card */}
-      <div className="w-full flex flex-col lg:flex-row lg:h-full lg:max-w-5xl lg:max-h-[80vh] lg:min-h-[500px] lg:glass-outer lg:backdrop-blur-sm lg:border lg:border-[rgba(212,160,23,0.25)] lg:rounded-[2.5rem] lg:shadow-2xl lg:shadow-[#0A1628]/15 lg:overflow-hidden relative z-10">
+      <div className="w-full flex flex-col lg:flex-row lg:h-full lg:max-w-5xl lg:max-h-[80vh] lg:min-h-[500px] lg:glass-outer lg:backdrop-blur-sm lg:border lg:border-gold-500/25 lg:rounded-[2.5rem] lg:shadow-2xl lg:shadow-navy-900/15 lg:overflow-hidden relative z-10">
         
         {/* Left sidebar: Contact Info (Dark Navy) */}
-        <div className="w-full lg:w-[38%] bg-gradient-to-b from-[#0A1628] to-[#0D1F3C] p-5 lg:p-10 flex flex-col justify-center relative overflow-hidden shrink-0 border-b lg:border-b-0 lg:border-r border-[#d4a017]/10 z-10 contact-card-sidebar rounded-2xl lg:rounded-none">
+        <div className="w-full lg:w-[38%] bg-gradient-to-b from-navy-900 to-navy-800 p-5 lg:p-10 flex flex-col justify-center relative overflow-hidden shrink-0 border-b lg:border-b-0 lg:border-r border-gold-500/10 z-10 contact-card-sidebar rounded-2xl lg:rounded-none">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,160,23,0.18)_0%,transparent_100%)] pointer-events-none z-0" />
 
           <div className="relative z-10 flex flex-col justify-between h-full">
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#D4A017] to-[#FFCA28] flex items-center justify-center shadow-lg shadow-[#D4A017]/30">
-                  <Sun className="w-3.5 h-3.5 text-[#0A1628]" />
+                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-gold-500 to-gold-400 flex items-center justify-center shadow-lg shadow-gold-500/30">
+                  <Sun className="w-3.5 h-3.5 text-navy-900" />
                 </div>
-                <span className="text-xs font-black uppercase tracking-widest text-[#FFD700]">
+                <span className="text-xs font-black uppercase tracking-widest text-gold-400">
                   SunNest Power
                 </span>
               </div>
 
               <h1 className="text-2xl! md:text-4xl! font-black text-white leading-tight! mb-3">
                 Get In<br />
-                <span className="bg-linear-to-r from-[#D4A017] via-[#FFCA28] to-[#B38600] bg-clip-text text-transparent">Touch</span>
+                <span className="bg-linear-to-r from-gold-500 via-gold-400 to-gold-600 bg-clip-text text-transparent">Touch</span>
               </h1>
               <p className="text-sm! md:text-base! text-white/70 leading-relaxed! mb-5">
                 Ready to go solar? We're here to help you start your clean energy journey with a free inspection or consultation.
@@ -168,8 +168,8 @@ const ContactPage = memo(function ContactPage({ section }: Props) {
                       onClick={(e) => e.stopPropagation()}
                       className="flex items-center gap-2.5 group"
                     >
-                      <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-[#FFD700]/40 transition-colors shrink-0">
-                        <Icon className="w-3.5 h-3.5 text-[#FFD700]" />
+                      <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-gold-400/40 transition-colors shrink-0">
+                        <Icon className="w-3.5 h-3.5 text-gold-400" />
                       </div>
                       <div>
                         <div className="text-[10px] text-white/40 font-bold uppercase tracking-wider">{item.label}</div>
@@ -195,7 +195,7 @@ const ContactPage = memo(function ContactPage({ section }: Props) {
                 className={cn(
                   "flex-1 py-2 rounded-xl text-sm md:text-[15px] font-black transition-all cursor-pointer border-none flex items-center justify-center gap-1.5",
                   activeTab === "book"
-                    ? "bg-gradient-to-r from-[#D4A017] to-[#FFCA28] text-[#0A1628] shadow-md shadow-[#D4A017]/15"
+                    ? "bg-gradient-to-r from-gold-500 to-gold-400 text-navy-900 shadow-md shadow-gold-500/15"
                     : "text-text-mid hover:text-text-dark bg-transparent"
                 )}
               >
@@ -207,7 +207,7 @@ const ContactPage = memo(function ContactPage({ section }: Props) {
                 className={cn(
                   "flex-1 py-2 rounded-xl text-sm md:text-[15px] font-black transition-all cursor-pointer border-none flex items-center justify-center gap-1.5",
                   activeTab === "message"
-                    ? "bg-gradient-to-r from-[#D4A017] to-[#FFCA28] text-[#0A1628] shadow-md shadow-[#D4A017]/15"
+                    ? "bg-gradient-to-r from-gold-500 to-gold-400 text-navy-900 shadow-md shadow-gold-500/15"
                     : "text-text-mid hover:text-text-dark bg-transparent"
                 )}
               >
@@ -240,11 +240,11 @@ const ContactPage = memo(function ContactPage({ section }: Props) {
                         <div key={s} className="flex-1">
                           <div className={cn(
                             "h-1 rounded-full transition-all duration-300",
-                            bookingStep >= s ? "bg-gradient-to-r from-[#D4A017] to-[#FFCA28]" : "bg-amber-100"
+                            bookingStep >= s ? "bg-gradient-to-r from-gold-500 to-gold-400" : "bg-gold-500/12"
                           )} />
                           <div className={cn(
                             "text-[11px] font-bold mt-1",
-                            bookingStep >= s ? "text-[#D4A017]" : "text-text-light"
+                            bookingStep >= s ? "text-gold-500" : "text-text-light"
                           )}>
                             {s === 1 ? "Pick Date" : s === 2 ? "Pick Time" : "Your Details"}
                           </div>
@@ -263,7 +263,7 @@ const ContactPage = memo(function ContactPage({ section }: Props) {
                               else setCurrentMonth(m => m - 1);
                               setSelectedDay(null);
                             }}
-                            className="border border-[#D4A017]/35 rounded-lg px-2.5 py-1 text-xs font-bold text-[#D4A017] cursor-pointer hover:bg-gold-500/10 glass-card-sm"
+                            className="border border-gold-500/35 rounded-lg px-2.5 py-1 text-xs font-bold text-gold-500 cursor-pointer hover:bg-gold-500/10 glass-card-sm"
                           >
                             ←
                           </button>
@@ -277,7 +277,7 @@ const ContactPage = memo(function ContactPage({ section }: Props) {
                               else setCurrentMonth(m => m + 1);
                               setSelectedDay(null);
                             }}
-                            className="border border-[#D4A017]/35 rounded-lg px-2.5 py-1 text-xs font-bold text-[#D4A017] cursor-pointer hover:bg-gold-500/10 glass-card-sm"
+                            className="border border-gold-500/35 rounded-lg px-2.5 py-1 text-xs font-bold text-gold-500 cursor-pointer hover:bg-gold-500/10 glass-card-sm"
                           >
                             →
                           </button>
@@ -313,7 +313,7 @@ const ContactPage = memo(function ContactPage({ section }: Props) {
                                 className={cn(
                                   "py-1 md:py-1.5 text-xs md:text-sm font-bold rounded-lg transition-all duration-200 border-none",
                                   selected
-                                    ? "bg-gradient-to-br from-[#D4A017] to-[#FFCA28] text-white shadow-md shadow-[#D4A017]/30"
+                                    ? "bg-gradient-to-br from-gold-500 to-gold-400 text-white shadow-md shadow-gold-500/30"
                                     : disabled
                                       ? "text-slate-200 cursor-not-allowed bg-transparent"
                                       : "text-text-dark hover:bg-gold-500/10 cursor-pointer"
@@ -331,7 +331,7 @@ const ContactPage = memo(function ContactPage({ section }: Props) {
                           className={cn(
                             "w-full flex items-center justify-center py-1.5 md:py-2 rounded-xl text-sm md:text-base font-bold text-white transition-all shadow-md shrink-0 border-none",
                             selectedDay
-                              ? "bg-gradient-to-r from-[#D4A017] to-[#FFCA28] hover:from-[#B38600] hover:to-[#D4A017] cursor-pointer shadow-[#D4A017]/25"
+                              ? "bg-gradient-to-r from-gold-500 to-gold-400 hover:from-gold-600 hover:to-gold-500 cursor-pointer shadow-gold-500/25"
                               : "bg-slate-300 cursor-not-allowed shadow-none"
                           )}
                         >
@@ -344,7 +344,7 @@ const ContactPage = memo(function ContactPage({ section }: Props) {
                     {bookingStep === 2 && (
                       <div className="flex-1 flex flex-col justify-center shrink-0">
                         <div className="flex items-center gap-2 mb-2 md:mb-3.5">
-                          <button onClick={(e) => { e.stopPropagation(); setBookingStep(1); }} className="text-[#D4A017] font-black text-sm cursor-pointer bg-transparent border-none p-0">←</button>
+                          <button onClick={(e) => { e.stopPropagation(); setBookingStep(1); }} className="text-gold-500 font-black text-sm cursor-pointer bg-transparent border-none p-0">←</button>
                           <div>
                             <h3 className="text-sm font-bold text-text-dark">Select a Time</h3>
                             <p className="text-[11px] md:text-xs text-text-light">{monthName} {selectedDay}, {currentYear}</p>
@@ -359,8 +359,8 @@ const ContactPage = memo(function ContactPage({ section }: Props) {
                               className={cn(
                                 "py-1.5 px-0.5 md:py-2 text-xs md:text-sm font-bold rounded-xl border text-center transition-all duration-200 cursor-pointer",
                                 selectedTime === time
-                                  ? "bg-gradient-to-r from-[#D4A017] to-[#FFCA28] text-[#0A1628] border-transparent shadow-md shadow-[#D4A017]/25 font-black"
-                                  : "border-[#D4A017]/20 text-text-mid hover:bg-gold-500/10 glass-card-sm"
+                                  ? "bg-gradient-to-r from-gold-500 to-gold-400 text-navy-900 border-transparent shadow-md shadow-gold-500/25 font-black"
+                                  : "border-gold-500/20 text-text-mid hover:bg-gold-500/10 glass-card-sm"
                               )}
                             >
                               {time}
@@ -374,7 +374,7 @@ const ContactPage = memo(function ContactPage({ section }: Props) {
                           className={cn(
                             "w-full flex items-center justify-center py-1.5 md:py-2 rounded-xl text-sm md:text-base font-bold text-white transition-all shadow-md border-none",
                             selectedTime
-                              ? "bg-gradient-to-r from-[#D4A017] to-[#FFCA28] hover:from-[#B38600] hover:to-[#D4A017] cursor-pointer shadow-[#D4A017]/25"
+                              ? "bg-gradient-to-r from-gold-500 to-gold-400 hover:from-gold-600 hover:to-gold-500 cursor-pointer shadow-gold-500/25"
                               : "bg-slate-300 cursor-not-allowed shadow-none"
                           )}
                         >
@@ -387,7 +387,7 @@ const ContactPage = memo(function ContactPage({ section }: Props) {
                     {bookingStep === 3 && (
                       <form onSubmit={handleBookingSubmit} onClick={(e) => e.stopPropagation()} className="flex-1 flex flex-col justify-center space-y-2">
                         <div className="flex items-center gap-2 mb-1 shrink-0">
-                          <button type="button" onClick={() => setBookingStep(2)} className="text-[#D4A017] font-black text-sm cursor-pointer bg-transparent border-none p-0">←</button>
+                          <button type="button" onClick={() => setBookingStep(2)} className="text-gold-500 font-black text-sm cursor-pointer bg-transparent border-none p-0">←</button>
                           <div>
                             <h3 className="text-sm font-bold text-text-dark">Your Details</h3>
                             <p className="text-[11px] md:text-xs text-text-light">{monthName} {selectedDay} at {selectedTime}</p>
@@ -402,7 +402,7 @@ const ContactPage = memo(function ContactPage({ section }: Props) {
                               required
                               value={bookingForm.name}
                               onChange={(e) => setBookingForm({ ...bookingForm, name: e.target.value })}
-                              className="w-full px-2.5 py-1 md:py-1.5 border border-[#D4A017]/20 rounded-lg text-sm md:text-base text-text-dark bg-white focus:outline-none focus:border-[#D4A017]"
+                              className="w-full px-2.5 py-1 md:py-1.5 border border-gold-500/20 rounded-lg text-sm md:text-base text-text-dark bg-white focus:outline-none focus:border-gold-500"
                             />
                           </div>
                           <div>
@@ -412,7 +412,7 @@ const ContactPage = memo(function ContactPage({ section }: Props) {
                               required
                               value={bookingForm.email}
                               onChange={(e) => setBookingForm({ ...bookingForm, email: e.target.value })}
-                              className="w-full px-2.5 py-1 md:py-1.5 border border-[#D4A017]/20 rounded-lg text-sm md:text-base text-text-dark bg-white focus:outline-none focus:border-[#D4A017]"
+                              className="w-full px-2.5 py-1 md:py-1.5 border border-gold-500/20 rounded-lg text-sm md:text-base text-text-dark bg-white focus:outline-none focus:border-gold-500"
                             />
                           </div>
                         </div>
@@ -425,7 +425,7 @@ const ContactPage = memo(function ContactPage({ section }: Props) {
                               required
                               value={bookingForm.phone}
                               onChange={(e) => setBookingForm({ ...bookingForm, phone: e.target.value })}
-                              className="w-full px-2.5 py-1 md:py-1.5 border border-[#D4A017]/20 rounded-lg text-sm md:text-base text-text-dark bg-white focus:outline-none focus:border-[#D4A017]"
+                              className="w-full px-2.5 py-1 md:py-1.5 border border-gold-500/20 rounded-lg text-sm md:text-base text-text-dark bg-white focus:outline-none focus:border-gold-500"
                             />
                           </div>
                           <div>
@@ -435,7 +435,7 @@ const ContactPage = memo(function ContactPage({ section }: Props) {
                               required
                               value={bookingForm.address}
                               onChange={(e) => setBookingForm({ ...bookingForm, address: e.target.value })}
-                              className="w-full px-2.5 py-1 md:py-1.5 border border-[#D4A017]/20 rounded-lg text-sm md:text-base text-text-dark bg-white focus:outline-none focus:border-[#D4A017]"
+                              className="w-full px-2.5 py-1 md:py-1.5 border border-gold-500/20 rounded-lg text-sm md:text-base text-text-dark bg-white focus:outline-none focus:border-gold-500"
                             />
                           </div>
                         </div>
@@ -446,13 +446,13 @@ const ContactPage = memo(function ContactPage({ section }: Props) {
                             value={bookingForm.notes}
                             onChange={(e) => setBookingForm({ ...bookingForm, notes: e.target.value })}
                             rows={1.5}
-                            className="w-full px-2.5 py-1 md:py-1.5 border border-[#D4A017]/20 rounded-lg text-sm md:text-base text-text-dark bg-white focus:outline-none focus:border-[#D4A017] resize-none"
+                            className="w-full px-2.5 py-1 md:py-1.5 border border-gold-500/20 rounded-lg text-sm md:text-base text-text-dark bg-white focus:outline-none focus:border-gold-500 resize-none"
                           />
                         </div>
 
                         <button
                           type="submit"
-                          className="w-full py-2 md:py-2.5 bg-gradient-to-r from-[#D4A017] to-[#FFCA28] hover:from-[#B38600] hover:to-[#D4A017] text-white rounded-xl text-sm md:text-base font-black transition-all shadow-md shadow-[#D4A017]/25 cursor-pointer flex items-center justify-center gap-1 border-none"
+                          className="w-full py-2 md:py-2.5 bg-gradient-to-r from-gold-500 to-gold-400 hover:from-gold-600 hover:to-gold-500 text-white rounded-xl text-sm md:text-base font-black transition-all shadow-md shadow-gold-500/25 cursor-pointer flex items-center justify-center gap-1 border-none"
                         >
                           Confirm Free Inspection <Check className="w-4 h-4" />
                         </button>
@@ -486,7 +486,7 @@ const ContactPage = memo(function ContactPage({ section }: Props) {
                           value={queryForm.name}
                           onChange={(e) => setQueryForm({ ...queryForm, name: e.target.value })}
                           placeholder="John Smith"
-                          className="w-full px-2.5 py-1.5 border border-[#D4A017]/20 rounded-lg text-sm md:text-base text-text-dark bg-white focus:outline-none focus:border-[#D4A017]"
+                          className="w-full px-2.5 py-1.5 border border-gold-500/20 rounded-lg text-sm md:text-base text-text-dark bg-white focus:outline-none focus:border-gold-500"
                         />
                       </div>
                       <div>
@@ -497,7 +497,7 @@ const ContactPage = memo(function ContactPage({ section }: Props) {
                           value={queryForm.email}
                           onChange={(e) => setQueryForm({ ...queryForm, email: e.target.value })}
                           placeholder="john@company.com"
-                          className="w-full px-2.5 py-1.5 border border-[#D4A017]/20 rounded-lg text-sm md:text-base text-text-dark bg-white focus:outline-none focus:border-[#D4A017]"
+                          className="w-full px-2.5 py-1.5 border border-gold-500/20 rounded-lg text-sm md:text-base text-text-dark bg-white focus:outline-none focus:border-gold-500"
                         />
                       </div>
                     </div>
@@ -509,7 +509,7 @@ const ContactPage = memo(function ContactPage({ section }: Props) {
                         value={queryForm.phone}
                         onChange={(e) => setQueryForm({ ...queryForm, phone: e.target.value })}
                         placeholder="+91 98765 43210"
-                        className="w-full px-2.5 py-1.5 border border-[#D4A017]/20 rounded-lg text-sm md:text-base text-text-dark bg-white focus:outline-none focus:border-[#D4A017]"
+                        className="w-full px-2.5 py-1.5 border border-gold-500/20 rounded-lg text-sm md:text-base text-text-dark bg-white focus:outline-none focus:border-gold-500"
                       />
                     </div>
 
@@ -521,13 +521,13 @@ const ContactPage = memo(function ContactPage({ section }: Props) {
                         onChange={(e) => setQueryForm({ ...queryForm, message: e.target.value })}
                         placeholder="Approximate energy consumption, load details, or solar questions..."
                         rows={2}
-                        className="w-full px-2.5 py-1.5 border border-[#D4A017]/20 rounded-lg text-sm md:text-base text-text-dark bg-white focus:outline-none focus:border-[#D4A017] resize-none"
+                        className="w-full px-2.5 py-1.5 border border-gold-500/20 rounded-lg text-sm md:text-base text-text-dark bg-white focus:outline-none focus:border-gold-500 resize-none"
                       />
                     </div>
 
                     <button
                       type="submit"
-                      className="w-full py-2.5 bg-gradient-to-r from-[#D4A017] to-[#FFCA28] hover:from-[#B38600] hover:to-[#D4A017] text-white rounded-xl text-sm md:text-base font-black transition-all shadow-md shadow-[#D4A017]/25 cursor-pointer flex items-center justify-center gap-1 border-none"
+                      className="w-full py-2.5 bg-gradient-to-r from-gold-500 to-gold-400 hover:from-gold-600 hover:to-gold-500 text-white rounded-xl text-sm md:text-base font-black transition-all shadow-md shadow-gold-500/25 cursor-pointer flex items-center justify-center gap-1 border-none"
                     >
                       Send Message <ArrowRight className="w-4 h-4" />
                     </button>

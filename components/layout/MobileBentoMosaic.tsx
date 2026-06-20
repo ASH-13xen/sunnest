@@ -77,7 +77,7 @@ export default function MobileBentoMosaic({ onSelect }: Props) {
               </div>
 
               <div className="relative z-10">
-                <span className="font-serif italic text-[10px] text-amber-400 tracking-wide block mb-0.5">
+                <span className="font-serif italic text-[10px] text-gold-400 tracking-wide block mb-0.5">
                   {meta.eyebrow}
                 </span>
                 <h2 className={isFeatured ? "text-lg! font-black text-white leading-tight" : "text-sm! font-black text-white leading-tight"}>

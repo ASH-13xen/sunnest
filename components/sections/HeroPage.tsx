@@ -52,13 +52,13 @@ export default function HeroPage({ section }: Props) {
       className={cn(
         "w-full h-screen lg:w-screen lg:h-screen relative overflow-hidden",
         isHighlighted
-          ? "ring-4 ring-amber-400 shadow-2xl shadow-amber-400/30"
+          ? "ring-4 ring-gold-400 shadow-2xl shadow-gold-400/30"
           : "ring-1 ring-white/10",
         isOverview && phase === "overview" ? "cursor-pointer" : ""
       )}
     >
       {isHighlighted && (
-        <div className="absolute inset-0 bg-amber-300/10 pointer-events-none z-10" />
+        <div className="absolute inset-0 bg-gold-400/10 pointer-events-none z-10" />
       )}
 
       {/* Premium Half-White Design Rectangle — fades out as card expands */}

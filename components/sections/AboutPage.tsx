@@ -148,7 +148,7 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ position, benefit, handleMove
             )}>
               <IconComponent className="w-4.5 h-4.5" />
             </div>
-            <span className={cn("font-serif italic font-normal text-[11px] lg:text-xs capitalize tracking-wide", isCenter ? "text-amber-300" : "text-gold-500")}>
+            <span className={cn("font-serif italic font-normal text-[11px] lg:text-xs capitalize tracking-wide", isCenter ? "text-gold-400" : "text-gold-500")}>
               SunNest Pillar
             </span>
           </div>
@@ -278,7 +278,7 @@ const AboutPage = memo(function AboutPage({ section, skipEntranceAnim }: Props) 
             className="relative z-10 flex flex-col justify-between h-full"
           >
             <div>
-              <span className="font-serif italic font-normal text-amber-400 capitalize normal-case text-base md:text-lg mb-2 block tracking-wide">
+              <span className="font-serif italic font-normal text-gold-400 capitalize normal-case text-base md:text-lg mb-2 block tracking-wide">
                 Who We Are
               </span>
               <h1 className="text-3xl! md:text-4xl! font-black text-white leading-tight! mb-3">
@@ -318,7 +318,7 @@ const AboutPage = memo(function AboutPage({ section, skipEntranceAnim }: Props) 
           <div className="w-full max-w-md relative z-10 flex flex-col h-full justify-between py-2">
             {/* Header */}
             <div className="text-center mb-6 shrink-0">
-              <span className="font-serif italic font-normal text-amber-500 capitalize normal-case text-base md:text-lg mb-1.5 block tracking-wide">
+              <span className="font-serif italic font-normal text-gold-500 capitalize normal-case text-base md:text-lg mb-1.5 block tracking-wide">
                 Core Pillars
               </span>
               <h2 className="text-2xl! md:text-3xl! font-black text-text-dark tracking-tight mb-1">

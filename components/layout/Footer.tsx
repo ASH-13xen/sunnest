@@ -117,7 +117,7 @@ export const Footer = ({
   };
 
   return (
-    <footer className="bg-[#0A1628] border-t border-[#D4A017]/10 w-full text-white shrink-0">
+    <footer className="bg-navy-900 border-t border-gold-500/10 w-full text-white shrink-0">
       <div className="container mx-auto px-6 py-10 lg:py-12">
         <div className="grid gap-10 lg:grid-cols-2">
           <div className="space-y-4">
@@ -137,11 +137,11 @@ export const Footer = ({
                 onClick={(e) => { e.stopPropagation(); navigate(0); }}
                 className="flex items-center gap-2 bg-transparent border-none p-0 cursor-pointer text-left"
               >
-                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#D4A017] to-[#FFCA28] flex items-center justify-center shadow-lg shadow-[#D4A017]/30">
-                  <Sun className="w-4 h-4 text-[#0A1628]" />
+                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-gold-500 to-gold-400 flex items-center justify-center shadow-lg shadow-gold-500/30">
+                  <Sun className="w-4 h-4 text-navy-900" />
                 </div>
                 <span className="text-lg font-black tracking-tight text-white select-none font-sans">
-                  Sun<span className="text-[#FFD700]">Nest</span>
+                  Sun<span className="text-gold-400">Nest</span>
                   <span className="text-white/75 text-sm font-medium ml-1">Power</span>
                 </span>
               </button>
@@ -156,7 +156,7 @@ export const Footer = ({
                   href={social.href}
                   aria-label={social.label}
                   onClick={(e) => e.stopPropagation()}
-                  className="text-white/60 hover:text-[#FFD700] transition-colors"
+                  className="text-white/60 hover:text-gold-400 transition-colors"
                 >
                   {social.icon}
                 </a>
@@ -178,7 +178,7 @@ export const Footer = ({
                         {targetIdx !== null ? (
                           <button
                             onClick={(e) => handleLinkClick(e, link.name, link.href)}
-                            className="text-white/60 hover:text-[#FFD700] transition-colors bg-transparent border-none p-0 cursor-pointer text-xs font-semibold text-left"
+                            className="text-white/60 hover:text-gold-400 transition-colors bg-transparent border-none p-0 cursor-pointer text-xs font-semibold text-left"
                           >
                             {link.name}
                           </button>
@@ -186,7 +186,7 @@ export const Footer = ({
                           <a
                             href={link.href}
                             onClick={(e) => e.stopPropagation()}
-                            className="text-white/60 hover:text-[#FFD700] transition-colors text-xs font-semibold"
+                            className="text-white/60 hover:text-gold-400 transition-colors text-xs font-semibold"
                           >
                             {link.name}
                           </a>
@@ -209,7 +209,7 @@ export const Footer = ({
                 <button
                   key={idx}
                   onClick={(e) => handleLinkClick(e, link.name, link.href)}
-                  className="text-xs text-white/50 hover:text-[#FFD700] transition-colors bg-transparent border-none p-0 cursor-pointer"
+                  className="text-xs text-white/50 hover:text-gold-400 transition-colors bg-transparent border-none p-0 cursor-pointer"
                 >
                   {link.name}
                 </button>
@@ -218,7 +218,7 @@ export const Footer = ({
                   key={idx}
                   href={link.href}
                   onClick={(e) => e.stopPropagation()}
-                  className="text-xs text-white/50 hover:text-[#FFD700] transition-colors"
+                  className="text-xs text-white/50 hover:text-gold-400 transition-colors"
                 >
                   {link.name}
                 </a>

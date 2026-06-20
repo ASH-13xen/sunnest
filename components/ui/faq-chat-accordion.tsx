@@ -43,7 +43,7 @@ export function FaqAccordion({
   return (
     <div className={cn("p-1", className)}>
       {timestamp && (
-        <div className="mb-4 text-xs text-slate-400 font-semibold uppercase tracking-widest">{timestamp}</div>
+        <div className="mb-4 text-xs text-text-light font-semibold uppercase tracking-widest">{timestamp}</div>
       )}
 
       <Accordion.Root
@@ -64,8 +64,8 @@ export function FaqAccordion({
                   className={cn(
                     "rounded-2xl px-4 py-2.5 transition-all duration-200 font-bold text-sm lg:text-base tracking-tight shadow-xs border",
                     openItem === item.id.toString()
-                      ? "bg-[#0f2744] text-[#FFD700] border-transparent shadow-md shadow-[#0f2744]/15"
-                      : "bg-[rgba(255,255,255,0.9)] text-slate-800 border-[rgba(212,160,23,0.2)] hover:bg-amber-50 hover:text-[#0f2744]",
+                      ? "bg-navy-900 text-gold-400 border-transparent shadow-md shadow-navy-900/15"
+                      : "glass-card-sm text-text-dark border-gold-500/20 hover:bg-gold-500/10 hover:text-navy-900",
                     questionClassName
                   )}
                 >
@@ -76,8 +76,8 @@ export function FaqAccordion({
                   className={cn(
                     "w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 shrink-0 ml-4",
                     openItem === item.id.toString()
-                      ? "bg-[#0f2744]/10 text-[#0f2744] rotate-180"
-                      : "text-slate-400 hover:text-[#0f2744]"
+                      ? "bg-navy-900/10 text-navy-900 rotate-180"
+                      : "text-text-light hover:text-navy-900"
                   )}
                 >
                   {openItem === item.id.toString() ? (
@@ -104,7 +104,7 @@ export function FaqAccordion({
                 <div className="ml-4 mt-2 md:ml-8 pb-3">
                   <div
                     className={cn(
-                      "relative max-w-lg rounded-2xl bg-gradient-to-br from-[#D4A017] to-[#B38600] px-4.5 py-3 text-white text-xs lg:text-sm font-semibold shadow-md shadow-[#D4A017]/10 leading-relaxed",
+                      "relative max-w-lg rounded-2xl bg-gradient-to-br from-gold-500 to-gold-600 px-4.5 py-3 text-white text-xs lg:text-sm font-semibold shadow-md shadow-gold-500/10 leading-relaxed",
                       answerClassName
                     )}
                   >

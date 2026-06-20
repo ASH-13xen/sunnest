@@ -125,7 +125,7 @@ const SolutionsPage = memo(function SolutionsPage({
             className="relative z-10 flex flex-col w-full gap-4"
           >
             <div className="text-center lg:text-left">
-              <span className="font-serif italic font-normal text-amber-400 capitalize normal-case text-sm md:text-base lg:text-lg mb-1.5 block tracking-wide">
+              <span className="font-serif italic font-normal text-gold-400 capitalize normal-case text-sm md:text-base lg:text-lg mb-1.5 block tracking-wide">
                 What We Offer
               </span>
               <h1 className="text-2xl! md:text-3xl! lg:text-4xl font-black text-white leading-tight! mb-2">
@@ -147,7 +147,7 @@ const SolutionsPage = memo(function SolutionsPage({
                   e.stopPropagation();
                   navigate(2);
                 }} // Go to Pricing
-                className="px-6 py-3 lg:px-3 lg:py-0.5 bg-gradient-to-r from-gold-500 to-gold-400 text-navy-900 rounded-xl text-sm md:text-sm font-black hover:from-gold-600 hover:to-gold-500 transition-all border-none whitespace-nowrap"
+                className="px-6 py-3 lg:px-6 lg:py-1.5 bg-gradient-to-r from-gold-500 to-gold-400 text-navy-900 rounded-xl text-sm md:text-sm font-black hover:from-gold-600 hover:to-gold-500 transition-all border-none whitespace-nowrap"
               >
                 Explore Pricing Plans →
               </GlowButton>
