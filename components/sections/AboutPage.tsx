@@ -143,20 +143,20 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ position, benefit, handleMove
         <div>
           <div className="flex items-center justify-between mb-2">
             <div className={cn(
-              "w-8.5 h-8.5 rounded-xl flex items-center justify-center shrink-0",
+              "w-9.5 h-9.5 rounded-xl flex items-center justify-center shrink-0",
               isCenter ? "bg-gradient-to-br from-gold-500 to-gold-400 text-navy-900" : "bg-navy-900 text-gold-400"
             )}>
-              <IconComponent className="w-4 h-4" />
+              <IconComponent className="w-4.5 h-4.5" />
             </div>
-            <span className={cn("font-serif italic font-normal text-[10px] lg:text-[11px] capitalize tracking-wide", isCenter ? "text-amber-300" : "text-gold-500")}>
+            <span className={cn("font-serif italic font-normal text-[11px] lg:text-xs capitalize tracking-wide", isCenter ? "text-amber-300" : "text-gold-500")}>
               SunNest Pillar
             </span>
           </div>
 
-          <h3 className={cn("text-xs md:text-sm lg:text-[15px] font-black mb-1 leading-tight tracking-tight", isCenter ? "text-gold-400" : "text-text-dark")}>
+          <h3 className={cn("text-sm! md:text-base! lg:text-[17px] font-black mb-1 leading-tight! tracking-tight", isCenter ? "text-gold-400" : "text-text-dark")}>
             {benefit.title}
           </h3>
-          <p className={cn("text-[9px] lg:text-[10.5px] leading-relaxed font-semibold", isCenter ? "text-white/75" : "text-text-mid")}>
+          <p className={cn("text-[10.5px]! lg:text-xs leading-relaxed! font-semibold", isCenter ? "text-white/75" : "text-text-mid")}>
             {benefit.desc}
           </p>
         </div>
@@ -169,11 +169,11 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ position, benefit, handleMove
                 <span
                   key={i}
                   className={cn(
-                    "px-1.5 py-0.5 rounded-full text-[7.5px] lg:text-[8.5px] font-bold tracking-wide",
+                    "px-1.5 py-0.5 rounded-full text-[8.5px] lg:text-[9.5px] font-bold tracking-wide",
                     tag.type === "featured"
                       ? "bg-gold-500/12 text-gold-500 border border-gold-500/25"
-                      : isCenter 
-                        ? "bg-white/10 text-white/80 border border-white/10" 
+                      : isCenter
+                        ? "bg-white/10 text-white/80 border border-white/10"
                         : "bg-text-dark/5 text-text-dark/70 border border-text-dark/10"
                   )}
                 >
@@ -181,12 +181,12 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ position, benefit, handleMove
                 </span>
               ))}
             </div>
-            <div className={cn("flex flex-wrap gap-2 text-[7.5px] lg:text-[8.5px] font-bold", isCenter ? "text-white/60" : "text-text-dark/60")}>
+            <div className={cn("flex flex-wrap gap-2 text-[8.5px] lg:text-[9.5px] font-bold", isCenter ? "text-white/60" : "text-text-dark/60")}>
               {benefit.stats.map((stat, i) => {
                 const StatIcon = stat.icon;
                 return (
                   <span key={i} className="inline-flex items-center gap-0.5">
-                    <StatIcon className="w-2.5 h-2.5 text-gold-500" />
+                    <StatIcon className="w-3 h-3 text-gold-500" />
                     {stat.text}
                   </span>
                 );
@@ -232,7 +232,7 @@ const AboutPage = memo(function AboutPage({ section, skipEntranceAnim }: Props) 
     const updateSize = () => {
       const { matches } = window.matchMedia("(min-width: 640px)");
       setIsMobile(window.innerWidth < 1024);
-      setCardSize(window.innerWidth < 1024 ? 200 : matches ? 280 : 250);
+      setCardSize(window.innerWidth < 1024 ? 220 : matches ? 305 : 270);
     };
     updateSize();
     window.addEventListener("resize", updateSize);
@@ -243,7 +243,7 @@ const AboutPage = memo(function AboutPage({ section, skipEntranceAnim }: Props) 
     <div
       onClick={() => { if (phase === "overview") navigate(section.index); }}
       className={cn(
-        "w-screen min-h-screen lg:h-screen relative overflow-hidden rounded-2xl flex flex-col lg:justify-center lg:items-center pt-20 pb-4 px-4 lg:px-8 lg:py-16 transition-colors duration-500 bg-bg-cream",
+        "w-screen min-h-screen lg:h-screen relative overflow-hidden flex flex-col lg:justify-center lg:items-center pt-20 pb-4 px-4 lg:px-8 lg:py-16 transition-colors duration-500 bg-bg-cream",
         isHighlighted ? "ring-4 ring-gold-400 shadow-2xl shadow-gold-500/20" : "ring-1 ring-gold-500/10",
         isOverview && phase === "overview" ? "cursor-pointer" : ""
       )}
@@ -278,42 +278,32 @@ const AboutPage = memo(function AboutPage({ section, skipEntranceAnim }: Props) 
             className="relative z-10 flex flex-col justify-between h-full"
           >
             <div>
-              <span className="font-serif italic font-normal text-amber-400 capitalize normal-case text-[14px] md:text-[15px] mb-2 block tracking-wide">
+              <span className="font-serif italic font-normal text-amber-400 capitalize normal-case text-base md:text-lg mb-2 block tracking-wide">
                 Who We Are
               </span>
-              <h1 className="text-2xl md:text-3xl font-black text-white leading-tight mb-3">
+              <h1 className="text-3xl! md:text-4xl! font-black text-white leading-tight! mb-3">
                 Why Choose<br />
                 <span className="bg-linear-to-r from-gold-500 via-gold-400 to-gold-600 bg-clip-text text-transparent">SunNest Power?</span>
               </h1>
-              <p className="text-[11px] text-white/70 leading-relaxed mb-4">
+              <p className="text-sm! md:text-base! text-white/70 leading-relaxed! mb-4">
                 At SunNest Power, we believe solar energy should be reliable, accessible, and built for
                 long-term performance — from your first consultation to decades of clean energy production.
               </p>
 
-              <div className="space-y-2 mb-4">
+              <div className="space-y-2.5 mb-4">
                 {DIFFERENTIATORS.map((point) => (
                   <div key={point} className="flex items-start gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-green-400 mt-0.5 shrink-0" />
-                    <span className="text-[11px] text-white/80">{point}</span>
+                    <CheckCircle2 className="w-4.5 h-4.5 text-green-400 mt-0.5 shrink-0" />
+                    <span className="text-sm md:text-[15px] text-white/80">{point}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             <div>
-              <div className="p-3.5 bg-gold-500/12 border border-gold-500/20 rounded-xl mb-4">
-                <div className="text-[11px] font-black text-gold-400 mb-0.5 flex items-center gap-1.5">
-                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-gold-400 animate-pulse" />
-                  Proven Savings
-                </div>
-                <div className="text-[9px] text-white/60">
-                  87% average reduction in electricity bills for standard rooftop systems.
-                </div>
-              </div>
-
               <GlowButton
                 onClick={(e) => { e.stopPropagation(); navigate(5); }}
-                className="self-start px-4 py-2 bg-gradient-to-r from-gold-500 to-gold-400 text-navy-900 rounded-xl text-[11px] font-black hover:from-gold-600 hover:to-gold-500 transition-all border-none"
+                className="self-start px-7 py-3.5 bg-gradient-to-r from-gold-500 to-gold-400 text-navy-900 rounded-xl text-sm md:text-base font-black hover:from-gold-600 hover:to-gold-500 transition-all border-none"
               >
                 Discover Our Process →
               </GlowButton>
@@ -328,19 +318,19 @@ const AboutPage = memo(function AboutPage({ section, skipEntranceAnim }: Props) 
           <div className="w-full max-w-md relative z-10 flex flex-col h-full justify-between py-2">
             {/* Header */}
             <div className="text-center mb-6 shrink-0">
-              <span className="font-serif italic font-normal text-amber-500 capitalize normal-case text-[14px] md:text-[15px] mb-1.5 block tracking-wide">
+              <span className="font-serif italic font-normal text-amber-500 capitalize normal-case text-base md:text-lg mb-1.5 block tracking-wide">
                 Core Pillars
               </span>
-              <h2 className="text-xl md:text-2xl font-black text-text-dark tracking-tight mb-1">
+              <h2 className="text-2xl! md:text-3xl! font-black text-text-dark tracking-tight mb-1">
                 Our Core Benefits
               </h2>
-              <p className="text-[11px] text-text-mid max-w-xs mx-auto">
+              <p className="text-sm! md:text-[15px]! text-text-mid max-w-xs mx-auto">
                 Click on the side cards or use the arrows below to explore how we deliver value on every project.
               </p>
             </div>
 
             {/* Stagger Stack Container */}
-            <div className="relative w-full h-[240px] md:h-[320px] select-none shrink-0">
+            <div className="relative w-full h-[260px] md:h-[345px] select-none shrink-0">
               {benefitsList.map((benefit, index) => {
                 const centerIndex = Math.floor(benefitsList.length / 2);
                 const position = index - centerIndex;

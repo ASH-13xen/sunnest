@@ -117,7 +117,7 @@ export const Footer = ({
   };
 
   return (
-    <footer className="bg-[#0A1628] border-t border-[#D4A017]/10 w-full text-white shrink-0 mt-16">
+    <footer className="bg-[#0A1628] border-t border-[#D4A017]/10 w-full text-white shrink-0">
       <div className="container mx-auto px-6 py-10 lg:py-12">
         <div className="grid gap-10 lg:grid-cols-2">
           <div className="space-y-4">

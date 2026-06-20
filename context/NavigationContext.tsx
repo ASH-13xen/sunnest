@@ -19,6 +19,10 @@ export function NavigationProvider({
   const [activeIndex, setActiveIndex] = useState(0);
   const [phase, setPhase] = useState<AnimPhase>("idle");
   const [highlightIndex, setHighlightIndex] = useState<number | null>(null);
+  // Mobile-only: the default view is a normal scroll-stack of all sections. This
+  // flips true briefly while navigate() shows the bento mosaic as a "select and
+  // zoom" flourish, mirroring the desktop overview, then flips back to false.
+  const [mobileMosaicOpen, setMobileMosaicOpen] = useState(false);
   const animatingRef = useRef(false);
 
   const scrollTo = useCallback(
@@ -54,6 +58,32 @@ export function NavigationProvider({
     async (targetIndex: number) => {
       if (animatingRef.current || targetIndex === activeIndex) return;
       animatingRef.current = true;
+
+      // Mobile has no grid to zoom through — flash the bento mosaic with the
+      // target tile highlighted, then settle on that section, echoing the
+      // desktop zoom-out/highlight/zoom-in flow without the pixel transforms.
+      if (window.innerWidth < 1024) {
+        setPhase("zooming-out");
+        setMobileMosaicOpen(true);
+        await new Promise((r) => setTimeout(r, 350)); // let the mosaic finish animating in
+
+        setPhase("overview");
+        setHighlightIndex(targetIndex);
+        await new Promise((r) => setTimeout(r, 550)); // hold the highlight so it reads as "selected"
+
+        // Keep highlightIndex set through "zooming-in" — the morph-target rect in
+        // BentoGrid shares a layoutId with this tile and reads it to grow into
+        // the full screen, fading out once it has covered the section beneath.
+        setPhase("zooming-in");
+        setActiveIndex(targetIndex);
+        setMobileMosaicOpen(false);
+        await new Promise((r) => setTimeout(r, 600)); // let the tile finish growing + fading
+
+        setHighlightIndex(null);
+        setPhase("idle");
+        animatingRef.current = false;
+        return;
+      }
 
       const vw = window.innerWidth;
       const vh = window.innerHeight;
@@ -108,7 +138,7 @@ export function NavigationProvider({
   );
 
   return (
-    <NavigationContext.Provider value={{ activeIndex, phase, highlightIndex, navigate, scrollTo, setActiveIndex }}>
+    <NavigationContext.Provider value={{ activeIndex, phase, highlightIndex, navigate, scrollTo, setActiveIndex, mobileMosaicOpen, setMobileMosaicOpen }}>
       {children}
     </NavigationContext.Provider>
   );

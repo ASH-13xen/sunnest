@@ -33,6 +33,11 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Drawer overlay is always dark, so its contents need light text regardless of
+  // theme/section. Outside the drawer, hero always reads black against the video
+  // (and never flips on hover); everywhere else it follows the page theme.
+  const navTextWhite = isOpen || (!isHero && theme === "night");
+
   return (
     <nav className={cn(
       "fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-8 py-4 transition-all duration-300",
@@ -43,12 +48,12 @@ export default function Navbar() {
       {/* Logo text */}
       <span className={cn(
         "text-xl font-bold tracking-tight select-none transition-colors duration-300 z-[60]",
-        (isHero || isOpen || theme === "night") ? "text-white" : "text-text-dark"
+        navTextWhite ? "text-white" : "text-text-dark"
       )}>
         Sun<span className="text-[#FFD700]">Nest</span>
         <span className={cn(
           "text-sm font-medium ml-1 transition-colors duration-300",
-          (isHero || isOpen || theme === "night") ? "text-white/70" : "text-text-mid"
+          navTextWhite ? "text-white/70" : "text-text-mid"
         )}>Power</span>
       </span>
 
@@ -68,7 +73,7 @@ export default function Navbar() {
                       isActive
                         ? "bg-navy-900 text-gold-400 shadow-md border border-gold-500/35"
                         : isHero
-                          ? "text-white/95 hover:bg-white/10 hover:text-white"
+                          ? "text-text-dark hover:bg-black/5"
                           : "text-text-mid hover:bg-gold-500/10 hover:text-text-dark",
                       isAnimating ? "opacity-50 cursor-not-allowed" : ""
                     )}
@@ -86,9 +91,11 @@ export default function Navbar() {
           onClick={(e) => { e.stopPropagation(); toggleTheme(); }}
           className={cn(
             "w-8 h-8 rounded-full flex items-center justify-center cursor-pointer transition-all duration-300 border shadow-md z-[60]",
-            (isHero || isOpen || theme === "night")
+            isOpen || (!isHero && theme === "night")
               ? "bg-white/10 border-white/10 hover:bg-white/20 text-[#60A5FA]"
-              : "bg-[#D4A017]/10 border-[#D4A017]/25 hover:bg-[#D4A017]/25 text-[#FFD700]"
+              : isHero
+                ? "bg-bg-cream/90 backdrop-blur-md border-gold-500/30 hover:bg-bg-cream text-gold-500"
+                : "bg-[#D4A017]/10 border-[#D4A017]/25 hover:bg-[#D4A017]/25 text-[#FFD700]"
           )}
           title={theme === "day" ? "Switch to Night Mode" : "Switch to Day Mode"}
         >
@@ -105,7 +112,7 @@ export default function Navbar() {
             onClick={() => setIsOpen(!isOpen)}
             className={cn(
               "w-8 h-8 rounded-full border flex flex-col items-center justify-center gap-1.5 cursor-pointer z-[60] relative transition-colors duration-300 shadow-md",
-              (isHero || isOpen || theme === "night")
+              navTextWhite
                 ? "bg-white/10 border-white/10 hover:bg-white/20"
                 : "bg-navy-900/5 border-navy-900/10 hover:bg-navy-900/10"
             )}
@@ -113,15 +120,15 @@ export default function Navbar() {
           >
             <motion.span
               animate={{ rotate: isOpen ? 45 : 0, y: isOpen ? 5.5 : 0 }}
-              className={cn("w-4 h-0.5 block rounded-full transition-colors", (isHero || isOpen || theme === "night") ? "bg-white" : "bg-text-dark")}
+              className={cn("w-4 h-0.5 block rounded-full transition-colors", navTextWhite ? "bg-white" : "bg-text-dark")}
             />
             <motion.span
               animate={{ opacity: isOpen ? 0 : 1 }}
-              className={cn("w-4 h-0.5 block rounded-full transition-colors", (isHero || isOpen || theme === "night") ? "bg-white" : "bg-text-dark")}
+              className={cn("w-4 h-0.5 block rounded-full transition-colors", navTextWhite ? "bg-white" : "bg-text-dark")}
             />
             <motion.span
               animate={{ rotate: isOpen ? -45 : 0, y: isOpen ? -5.5 : 0 }}
-              className={cn("w-4 h-0.5 block rounded-full transition-colors", (isHero || isOpen || theme === "night") ? "bg-white" : "bg-text-dark")}
+              className={cn("w-4 h-0.5 block rounded-full transition-colors", navTextWhite ? "bg-white" : "bg-text-dark")}
             />
           </button>
         )}

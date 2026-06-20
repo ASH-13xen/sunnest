@@ -89,13 +89,14 @@ const ServicesPage = memo(function ServicesPage({ section }: Props) {
     <div
       onClick={() => { if (phase === "overview") navigate(section.index); }}
       className={cn(
-        "w-screen min-h-screen lg:h-screen overflow-y-auto no-scrollbar rounded-2xl bg-bg-cream flex flex-col justify-between",
+        "w-screen min-h-screen lg:h-screen overflow-y-auto no-scrollbar bg-bg-cream flex flex-col",
         isHighlighted ? "ring-4 ring-amber-400 shadow-2xl shadow-amber-200" : "ring-1 ring-amber-100/50",
         isOverview && phase === "overview" ? "cursor-pointer" : ""
       )}
     >
-      {/* Main viewport region containing the card (100dvh min height) */}
-      <div className="flex-1 w-full lg:min-h-screen flex flex-col lg:justify-center lg:items-center pt-20 pb-4 px-4 lg:py-16 relative shrink-0">
+      {/* Main region containing the card — sized to its content (not a forced 100vh)
+          so the footer below follows immediately with no dead gap. */}
+      <div className="w-full flex flex-col lg:justify-center lg:items-center pt-20 pb-8 px-4 lg:py-16 lg:pb-12 relative shrink-0">
         
         {/* Top Border Accent Line */}
         <div className="absolute top-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-transparent via-[#FFCA28] to-transparent z-30" />

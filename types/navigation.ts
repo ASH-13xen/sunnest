@@ -7,5 +7,7 @@ export interface NavigationContextValue {
   navigate: (index: number) => void;
   scrollTo: (index: number) => void;
   setActiveIndex: (index: number) => void;
+  mobileMosaicOpen: boolean;
+  setMobileMosaicOpen: (open: boolean) => void;
 }
 

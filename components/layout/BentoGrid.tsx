@@ -9,6 +9,7 @@ import { WeaveSpinner } from "@/components/ui/WeaveSpinner";
 import dynamic from "next/dynamic";
 import Navbar        from "@/components/layout/Navbar";
 import HeroPage      from "@/components/sections/HeroPage";
+import MobileBentoMosaic from "@/components/layout/MobileBentoMosaic";
 
 const dynamicImports = {
   about:     () => import("@/components/sections/AboutPage"),
@@ -298,7 +299,7 @@ function BentoGridContent({
   controls: any; 
   theme: string;
 }) {
-  const { phase, activeIndex, setActiveIndex } = useNavigation();
+  const { phase, activeIndex, setActiveIndex, mobileMosaicOpen, setMobileMosaicOpen, highlightIndex } = useNavigation();
   const isOverviewMode = phase === "overview" || phase === "zooming-out" || phase === "zooming-in";
   const isTransitioning = phase === "zooming-in" || phase === "zooming-out";
 
@@ -317,22 +318,13 @@ function BentoGridContent({
     activeIndexRef.current = activeIndex;
   }, [activeIndex]);
 
-  // Sections whose entrance animation has already played once — either via natural
-  // scroll or by being the target of a hamburger-menu zoom — so it doesn't replay
-  // when the mobile stack remounts after a zoom-triggered navigation settles to
-  // "idle". Marked synchronously in the render body (not an effect) so the very
-  // same render that builds the mobile stack already sees the just-arrived-at
-  // section as revealed.
+  // Sections whose entrance animation has already played once, so it doesn't
+  // replay every time the IntersectionObserver re-marks them as in-view.
   const revealedRef = useRef<Set<string>>(new Set());
-  if (isMobile && phase === "idle") {
-    revealedRef.current.add(SECTIONS[activeIndex].id);
-  }
 
-  // The mobile view swaps between this stacked list and the animated grid markup
-  // below. Re-mounting the list always starts at scrollTop 0, so when a
-  // zoom-triggered navigation (e.g. the hamburger menu) settles back to "idle",
-  // jump the freshly-mounted list straight to the active section instead of
-  // leaving it stranded at the top.
+  // After navigate() finishes its mosaic flourish (phase settles back to "idle"),
+  // snap the scroll-stack straight to the target section instead of leaving the
+  // user scrolled wherever they were when the navbar link was tapped.
   useLayoutEffect(() => {
     if (!isMobile || phase !== "idle") return;
     const containerEl = document.getElementById("mobile-scroll-container");
@@ -343,7 +335,7 @@ function BentoGridContent({
     }
   }, [isMobile, phase]);
 
-  // Highlight navbar section links as user scrolls stacked list on mobile
+  // Highlight navbar section links as the user scrolls the stack on mobile
   useEffect(() => {
     if (!isMobile || phase !== "idle") return;
 
@@ -376,15 +368,21 @@ function BentoGridContent({
     };
   }, [isMobile, phase, setActiveIndex]);
 
-  // Native vertical scroll stacked layout for mobile scrolling
-  if (isMobile && phase === "idle") {
+  // Mobile: a normal scroll-stack of every section, just like a regular page.
+  // navigate() (navbar links, in-page CTAs) flashes the bento mosaic on top with
+  // the target tile highlighted, then dismisses into that section — the same
+  // "select and zoom" beat as the desktop overview, without the pixel transforms.
+  if (isMobile) {
     return (
-      <div 
-        id="mobile-scroll-container" 
-        className="fixed inset-0 w-full h-full bg-bg-cream transition-colors duration-500 overflow-y-auto overflow-x-hidden z-30 no-scrollbar scroll-smooth"
+      <div
+        id="mobile-scroll-container"
+        className={cn(
+          "fixed inset-0 w-full h-full bg-bg-cream transition-colors duration-500 overflow-x-hidden z-30 no-scrollbar scroll-smooth",
+          phase === "idle" ? "overflow-y-auto" : "overflow-y-hidden"
+        )}
       >
         {/* Background Solar Farm Image */}
-        <div 
+        <div
           className="absolute inset-0 z-0 pointer-events-none transition-[background-image] duration-1000"
           style={{
             backgroundImage: `url(${
@@ -422,6 +420,40 @@ function BentoGridContent({
             );
           })}
         </div>
+
+        {/* Mosaic flourish — flashes over the stack while navigate() is selecting a section */}
+        <AnimatePresence>
+          {mobileMosaicOpen && (
+            <motion.div
+              key="mosaic"
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 1.04 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="fixed inset-0 z-40 bg-bg-cream"
+            >
+              <MobileBentoMosaic onSelect={(index) => { setActiveIndex(index); setMobileMosaicOpen(false); }} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Morph target — shares a layoutId with the highlighted tile, so it visibly
+            grows from that tile's rect to fill the screen (then fades to reveal the
+            section, already swapped in underneath) instead of a flat crossfade. */}
+        <AnimatePresence>
+          {phase === "zooming-in" && highlightIndex !== null && SECTIONS[highlightIndex] && (
+            <motion.div
+              key="morph-target"
+              layoutId={`bento-tile-${SECTIONS[highlightIndex].id}`}
+              animate={{ opacity: [1, 1, 0] }}
+              transition={{
+                layout: { duration: 0.55, ease: [0.16, 1, 0.3, 1] },
+                opacity: { duration: 0.55, times: [0, 0.6, 1] },
+              }}
+              className="fixed inset-0 z-50 overflow-hidden bg-gradient-to-br from-navy-900 to-navy-800"
+            />
+          )}
+        </AnimatePresence>
       </div>
     );
   }
@@ -476,7 +508,7 @@ function BentoGridContent({
               isOverview={isOverviewMode}
               isVisible={isVisible}
             >
-              <Page section={section} skipEntranceAnim={revealedRef.current.has(section.id)} />
+              <Page section={section} />
             </BentoCellWrapper>
           );
         })}

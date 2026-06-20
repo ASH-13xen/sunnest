@@ -312,14 +312,14 @@ export default function KineticMaskHero({
             {/* White text reveals the video inside it */}
             <motion.g
               style={{
-                transformOrigin: isMobile ? "450px 470px" : "430px 470px", // Zooms directly into the stroke of the first 'N' of SUNNEST
+                transformOrigin: isMobile ? "450px 430px" : "430px 470px", // Zooms directly into the stroke of the first 'N' of SUNNEST
                 scale: scale,
               }}
             >
               {/* Main Brand Name */}
               <text
                 x="500"
-                y="470"
+                y={isMobile ? "430" : "470"}
                 textAnchor="middle"
                 dominantBaseline="middle"
                 fill="white"
@@ -334,7 +334,7 @@ export default function KineticMaskHero({
               {/* Sub-label */}
               <text
                 x="507" // Slightly offset to account for last-letter letter-spacing centering
-                y="545"
+                y={isMobile ? "505" : "545"}
                 textAnchor="middle"
                 dominantBaseline="middle"
                 fill="white"
@@ -352,14 +352,14 @@ export default function KineticMaskHero({
         {/* ──────── IDEA 2: 3D Architectural Shadow (Behind video) ──────── */}
         <motion.g
           style={{
-            transformOrigin: isMobile ? "450px 470px" : "430px 470px",
+            transformOrigin: isMobile ? "450px 430px" : "430px 470px",
             scale: scale,
             opacity: bgOpacity,
           }}
         >
           <text
             x="505"
-            y="475"
+            y={isMobile ? "435" : "475"}
             textAnchor="middle"
             dominantBaseline="middle"
             fill="#050C16"
@@ -373,7 +373,7 @@ export default function KineticMaskHero({
           </text>
           <text
             x="512"
-            y="550"
+            y={isMobile ? "510" : "550"}
             textAnchor="middle"
             dominantBaseline="middle"
             fill="#050C16"
@@ -414,14 +414,14 @@ export default function KineticMaskHero({
         {/* ──────── IDEA 1: Liquid Gold Outline (On top of video) ──────── */}
         <motion.g
           style={{
-            transformOrigin: isMobile ? "450px 470px" : "430px 470px",
+            transformOrigin: isMobile ? "450px 430px" : "430px 470px",
             scale: scale,
             opacity: bgOpacity,
           }}
         >
           <text
             x="500"
-            y="470"
+            y={isMobile ? "430" : "470"}
             textAnchor="middle"
             dominantBaseline="middle"
             fill="none"
@@ -437,7 +437,7 @@ export default function KineticMaskHero({
           </text>
           <text
             x="507"
-            y="545"
+            y={isMobile ? "505" : "545"}
             textAnchor="middle"
             dominantBaseline="middle"
             fill="none"
@@ -453,9 +453,11 @@ export default function KineticMaskHero({
         </motion.g>
       </svg>
 
-      {/* Elegant Technical Spec Overlays (fades out as we zoom) */}
+      {/* Elegant Technical Spec Overlays (fades out as we zoom) — sits just below the
+          brand mask on mobile (slightly above viewport center); pinned to the bottom
+          on desktop where the brand text isn't shifted up. */}
       <motion.div
-        className="absolute inset-x-0 bottom-12 z-40 flex flex-col items-center justify-center gap-3 pointer-events-none text-center px-6"
+        className="absolute inset-x-0 top-[58%] lg:top-auto lg:bottom-12 z-40 flex flex-col items-center justify-center gap-3 pointer-events-none text-center px-6"
         style={{ opacity: contentOpacity }}
       >
         <p className="max-w-md text-xs md:text-sm font-medium text-white/65 leading-relaxed">
